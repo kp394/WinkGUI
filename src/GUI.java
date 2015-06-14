@@ -32,14 +32,25 @@ public class GUI extends Frame implements ActionListener {
 	private TextField Species;
 	private TextField Location;
 	
+	private Label Error;
+	private Button eButton;
+	
 	private JPanel Info;
+	private JPanel GUI;
+	private JPanel error;
+	private JPanel cards;
 	
 	private Button button;   // Declare component Button
  
    /** Constructor to setup GUI components and event handling */
 	public GUI () {
-		setLayout(new FlowLayout());
-		setBackground(Color.decode("#D6D6C2"));
+		
+		setLayout(new CardLayout());
+		
+		GUI = new JPanel();
+		GUI.setLayout(new FlowLayout());
+		GUI.setBackground(Color.decode("#D6D6C2"));
+		
 		Info = new JPanel();
 		Info.setLayout(new GridLayout(8, 1));
 		
@@ -52,7 +63,7 @@ public class GUI extends Frame implements ActionListener {
 	     });
 	    //GUI Label
 	    GUI_Label = new Label("Bird Tagging Log");
-	    add(GUI_Label);
+	    GUI.add(GUI_Label);
 	    
 	    //BCH Code
 		BCH_label = new Label("BCH Code");  // construct Label
@@ -121,17 +132,30 @@ public class GUI extends Frame implements ActionListener {
 	    //Submit Button
 	    button = new Button("Submit");   // construct Button
 	    
-	    add(Info);
-	    add(button);                    // "super" Frame adds Button
+	    GUI.add(Info);
+	    GUI.add(button);                    // "super" Frame adds Button
 	 
 	    button.addActionListener(this);
 	    // Clicking Button source fires ActionEvent
 	    // btnCount registers this instance as ActionEvent listener
+	    
+		
+		error = new JPanel();
+		error.setLayout(new FlowLayout());
+		Error = new Label("Invalid input");
+		error.add(Error);
+		eButton = new Button("Back");
+		error.add(eButton);
+		eButton.addActionListener(this);
 	 
 	    setTitle("Bird Tagging");  // "super" Frame sets title
 	    setSize(250, 300);        // "super" Frame sets initial window size
-	 
-	 
+	    
+	    cards = new JPanel(new CardLayout());
+	    cards.add(GUI, "GUI");
+	    cards.add(error, "error");
+
+	    add(cards);
 	    setVisible(true);         // "super" Frame shows
 	 
 	   }
@@ -145,27 +169,36 @@ public class GUI extends Frame implements ActionListener {
 	   /** ActionEvent handler - Called upon button-click. */
 	   @Override
 	   public void actionPerformed(ActionEvent evt) {
+		   
+		    Button buttonPressed = (Button)evt.getSource();
+		    if (buttonPressed == button){
 
-			GUIPacket packet;
-			ClientCommunication socket = new ClientCommunication();
-			
-			packet = new GUIPacket(
-			BCH_Code.getText(),
-			Base_ID.getText(),
-			Date_Programmed.getText(),
-			Date_Tested.getText(),
-			Date_Given.getText(),
-			Customer.getText(),
-			Species.getText(),
-			Location.getText()
-			);
-			
-			if (!packet.check()){
-				//Highlight invalid entries' textfield in red? Or just give generic "Invalid Entry" message
-			}
-			
-			//handle exceptions on GUI side to display errors?
-			socket.send(packet);
+				GUIPacket packet;
+				//ClientCommunication socket = new ClientCommunication();
+				
+				packet = new GUIPacket(
+				BCH_Code.getText(),
+				Base_ID.getText(),
+				Date_Programmed.getText(),
+				Date_Tested.getText(),
+				Date_Given.getText(),
+				Customer.getText(),
+				Species.getText(),
+				Location.getText()
+				);
+				
+				if (!packet.check()){
+					CardLayout cl = (CardLayout)(cards.getLayout());
+					cl.show(cards, "error");
+				}
+				
+				//handle exceptions on GUI side to display errors?
+				//socket.send(packet);
+		    }
+		    if (buttonPressed == eButton){
+			    CardLayout cl = (CardLayout)(cards.getLayout());
+			    cl.show(cards, "GUI");
+		    }
 			
 	   }
 }
