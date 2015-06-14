@@ -2,7 +2,13 @@ import java.awt.*;        // Using AWT container and component classes
 import java.awt.event.*;  // Using AWT event classes and listener interfaces
 
 import javax.swing.JPanel;
- 
+
+/**
+ * @author Kevin Pu (kp394@cornell.edu)
+ * 
+ * GUI Class for a UI to log RF Tag info
+ * 
+ */
 // An AWT program inherits from the top-level container java.awt.Frame
 public class GUI extends Frame implements ActionListener {
 	// Declare Label Components
@@ -28,7 +34,7 @@ public class GUI extends Frame implements ActionListener {
 	
 	private JPanel Info;
 	
-	private Button btnCount;   // Declare component Button
+	private Button button;   // Declare component Button
  
    /** Constructor to setup GUI components and event handling */
 	public GUI () {
@@ -36,9 +42,8 @@ public class GUI extends Frame implements ActionListener {
 		setBackground(Color.decode("#D6D6C2"));
 		Info = new JPanel();
 		Info.setLayout(new GridLayout(8, 1));
-         // "super" Frame sets its layout to FlowLayout, which arranges the components
-         //  from left-to-right, and flow to next row from top-to-bottom.
 		
+		//Handles exit button on the window
 	    addWindowListener(new WindowAdapter(){
 	    	public void windowClosing(WindowEvent e){
 	           dispose();
@@ -55,7 +60,7 @@ public class GUI extends Frame implements ActionListener {
  
       	BCH_Code = new TextField("", 10); // construct TextField
       	BCH_Code.setEditable(true);       // set to fillable field
-      	Info.add(BCH_Code);                     // "super" Frame adds tfCount
+      	Info.add(BCH_Code);                     // "super" Frame adds field
       
       	//Base ID
 	    Base_ID_Label = new Label("Base ID");  // construct Label
@@ -63,7 +68,7 @@ public class GUI extends Frame implements ActionListener {
 	 
 	    Base_ID = new TextField("", 10); // construct TextField
 	    Base_ID.setEditable(true);       // set to fillable field
-	    Info.add(Base_ID);                     // "super" Frame adds tfCount
+	    Info.add(Base_ID);                     // "super" Frame adds field
 	      
 	    //Date Programmed
 	    Date_Programmed_Label = new Label("Date Programmed");  // construct Label
@@ -71,7 +76,7 @@ public class GUI extends Frame implements ActionListener {
 	 
 	    Date_Programmed = new TextField("", 10); // construct TextField
 	    Date_Programmed.setEditable(true);       // set to fillable field
-	    Info.add(Date_Programmed);                     // "super" Frame adds tfCount
+	    Info.add(Date_Programmed);                     // "super" Frame adds field
 	      
 	    //Date Tested
 	    Date_Tested_Label = new Label("Date Tested");  // construct Label
@@ -79,7 +84,7 @@ public class GUI extends Frame implements ActionListener {
 	 
 	    Date_Tested = new TextField("", 10); // construct TextField
 	    Date_Tested.setEditable(true);       // set to fillable field
-	    Info.add(Date_Tested);                     // "super" Frame adds tfCount
+	    Info.add(Date_Tested);                     // "super" Frame adds field
 	      
 	    //Date given to customer
 	    Date_Given_Label = new Label("Date Given");  // construct Label
@@ -87,7 +92,7 @@ public class GUI extends Frame implements ActionListener {
 	 
 	    Date_Given = new TextField("", 10); // construct TextField
 	    Date_Given.setEditable(true);       // set to fillable field
-	    Info.add(Date_Given);                     // "super" Frame adds tfCount
+	    Info.add(Date_Given);                     // "super" Frame adds field
 	      
 	    //Customer
 	    Customer_Label = new Label("Customer");  // construct Label
@@ -95,7 +100,7 @@ public class GUI extends Frame implements ActionListener {
 	 
 	    Customer = new TextField("", 10); // construct TextField
 	    Customer.setEditable(true);       // set to fillable field
-	    Info.add(Customer);                     // "super" Frame adds tfCount
+	    Info.add(Customer);                     // "super" Frame adds field
 	      
 	    //Species
 	    Species_Label = new Label("Species");  // construct Label
@@ -103,7 +108,7 @@ public class GUI extends Frame implements ActionListener {
 	 
 	    Species = new TextField("", 10); // construct TextField
 	    Species.setEditable(true);       // set to fillable field
-	    Info.add(Species);                     // "super" Frame adds tfCount
+	    Info.add(Species);                     // "super" Frame adds field
 	      
 	    //Location
 	    Location_Label = new Label("Location");  // construct Label
@@ -114,12 +119,12 @@ public class GUI extends Frame implements ActionListener {
 	    Info.add(Location);                     // "super" Frame adds tfCount
 	      
 	    //Submit Button
-	    btnCount = new Button("Submit");   // construct Button
+	    button = new Button("Submit");   // construct Button
 	    
 	    add(Info);
-	    add(btnCount);                    // "super" Frame adds Button
+	    add(button);                    // "super" Frame adds Button
 	 
-	    btnCount.addActionListener(this);
+	    button.addActionListener(this);
 	    // Clicking Button source fires ActionEvent
 	    // btnCount registers this instance as ActionEvent listener
 	 
@@ -137,9 +142,30 @@ public class GUI extends Frame implements ActionListener {
 	      GUI app = new GUI();
 	   }
 	 
-	   /** ActionEvent handler - Called back upon button-click. */
+	   /** ActionEvent handler - Called upon button-click. */
 	   @Override
 	   public void actionPerformed(ActionEvent evt) {
-	      System.out.println("Works?");
+
+			GUIPacket packet;
+			ClientCommunication socket = new ClientCommunication();
+			
+			packet = new GUIPacket(
+			BCH_Code.getText(),
+			Base_ID.getText(),
+			Date_Programmed.getText(),
+			Date_Tested.getText(),
+			Date_Given.getText(),
+			Customer.getText(),
+			Species.getText(),
+			Location.getText()
+			);
+			
+			if (!packet.check()){
+				//Highlight invalid entries' textfield in red? Or just give generic "Invalid Entry" message
+			}
+			
+			//handle exceptions on GUI side to display errors?
+			socket.send(packet);
+			
 	   }
 }
