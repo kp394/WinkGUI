@@ -1,59 +1,53 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.EOFException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
 // An abstraction of the Java Socket for use by the client side
+// Sends formatted JSON strings
 public class ClientCommunication {
 	private Socket socket;
-	private ObjectInputStream rx;
-	private ObjectOutputStream tx;
+	private BufferedReader inReader;
+	private BufferedWriter outWriter;
 
-	private String hostname = ""; // IP will go here, or hostname if I get
-									// Cornell IT hosting
-	private int port = 0; // Same thing, will be set.
+	private String hostname = "104.236.255.240";//"localhost"; // TODO: Cornell IT Hosting
+	private int port = 60010;
 
 	public ClientCommunication() {
 		try {
 			this.socket = new Socket(InetAddress.getByName(this.hostname), this.port);
-			this.tx = new ObjectOutputStream(this.socket.getOutputStream());
-			this.rx = new ObjectInputStream(this.socket.getInputStream());
+			this.outWriter = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
+			this.inReader = new BufferedReader(new InputStreamReader(this.socket.getInputStream())); 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
-	public void send(Object sent) {
+	public void send(GUIPacket packet) {
 		try {
-			this.tx.writeObject(sent);
-			this.tx.flush();
+			// Check validity?
+			char[] write = packet.getStreamable();
+			assert(write != null);
+			this.outWriter.write(write);
+			this.outWriter.newLine();
+			this.outWriter.flush();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
+	// To be implemented when needed
 	public Object recieve() {
-		Object recieved = null;
-		while (true) {
-
-			try {
-				recieved = this.rx.readObject();
-				return recieved;
-			} catch (EOFException eof) {
-				continue;
-				// FIXME: this is a hack fix with Object streams, I'll look into
-				// it, but it works for now.
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		return null;
 	}
 
 	public void close() {
 		try{
-			if(this.tx != null) this.tx.close();
-			if(this.rx != null) this.rx.close();
+			if(this.outWriter != null) this.outWriter.close();
+			if(this.inReader != null) this.inReader.close();
 			if(this.socket != null) this.socket.close();
 		}
 		catch(Exception e){

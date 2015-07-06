@@ -1,15 +1,10 @@
-import java.io.Serializable;
-
 /**
  * @author Daniel Etter (dje67)
- * @version 0.0.1
+ * @version 0.0.2
  * 
- * A GUIPacket represents 
  * 
  */
-public class GUIPacket implements Serializable{
-	private static final long serialVersionUID = 7526472295622776147L;
-
+public class GUIPacket{
 	private String BCHCode;
 	private String baseID;
 	private String dateProgrammed;
@@ -39,7 +34,7 @@ public class GUIPacket implements Serializable{
 		this.BCHCode = this.baseID = this.dateToCustomer = this.customer = this.species = this.location = null;
 	}
 	
-	// Check if any fields are NULL or empty
+	// Check if any fields are NULL and then checks if empty
 	public boolean check(){
 		boolean valid = true;
 		
@@ -71,6 +66,18 @@ public class GUIPacket implements Serializable{
 	}
 	
 	// Setters and getters
+	public void setAll(String BCHCode, String baseID, String dateProgrammed,
+			String dateTested, String dateToCustomer, String customer,
+			String species, String location){
+		this.BCHCode = BCHCode;
+		this.baseID = baseID;
+		this.dateProgrammed = dateProgrammed;
+		this.dateTested = dateTested;
+		this.dateToCustomer = dateToCustomer;
+		this.customer = customer;
+		this.species = species;
+		this.location = location;
+	}
 	public void setBCHCode(String BCHCode){
 		this.BCHCode = BCHCode;
 	}
@@ -132,5 +139,21 @@ public class GUIPacket implements Serializable{
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	/* Creates single string to be used with network communication
+	 * returns NULL on error
+	 */
+	public char[] getStreamable() {
+		char[] ret;
+		if(check()){
+			String all = this.BCHCode+":"+this.baseID+":"+this.dateProgrammed+":"+this.dateTested+":"+this.dateToCustomer
+					+":"+this.customer+":"+this.species+":"+this.location;
+			ret = all.toCharArray();
+		}
+		else{
+			return null;
+		}
+		return ret;
 	}
 }

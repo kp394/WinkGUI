@@ -174,7 +174,7 @@ public class GUI extends Frame implements ActionListener {
 		    if (buttonPressed == button){
 
 				GUIPacket packet;
-				//ClientCommunication socket = new ClientCommunication();
+				ClientCommunication socket = new ClientCommunication();
 				
 				packet = new GUIPacket(
 				BCH_Code.getText(),
@@ -193,7 +193,7 @@ public class GUI extends Frame implements ActionListener {
 				}
 				
 				//handle exceptions on GUI side to display errors?
-				//socket.send(packet);
+				socket.send(packet);
 		    }
 		    if (buttonPressed == eButton){
 			    CardLayout cl = (CardLayout)(cards.getLayout());
