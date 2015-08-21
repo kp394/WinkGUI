@@ -5,140 +5,153 @@
  * 
  */
 public class GUIPacket{
-	private String BCHCode;
-	private String baseID;
-	private String dateProgrammed;
-	private String dateTested;
-	private String dateToCustomer;
-	private String customer;
-	private String species;
-	private String location;
+	private String Band_Number;
+	private String Species;
+	private String Deploy_Date;
+	private String Deploy_Time;
+	private String Deploy_Location;
+	private String Recover_Date;
+	private String Recover_Time;
+	private String Recover_Location;
+	private String Comment;
+	
 
-	public GUIPacket(String BCHCode, String baseID, String dateProgrammed,
-			String dateTested, String dateToCustomer, String customer,
-			String species, String location) {
-		this.BCHCode = BCHCode;
-		this.baseID = baseID;
-		this.dateProgrammed = dateProgrammed;
-		this.dateTested = dateTested;
-		this.dateToCustomer = dateToCustomer;
-		this.customer = customer;
-		this.species = species;
-		this.location = location;
+	public GUIPacket(String Band_Number, String Species, String Deploy_Date,
+			String Deploy_Time, String Deploy_Location, String Recover_Date,
+			String Recover_Time, String Recover_Location, String Comment) {
+		this.Band_Number = Band_Number;
+		this.Species = Species;
+		this.Deploy_Date = Deploy_Date;
+		this.Deploy_Time = Deploy_Time;
+		this.Deploy_Location = Deploy_Location;
+		this.Recover_Date = Recover_Date;
+		this.Recover_Time = Recover_Time;
+		this.Recover_Location = Recover_Location;
+		this.Comment = Comment;
 	}
 
 	/**
 	 * Initialize an empty GUIPacket object
 	 **/
 	public GUIPacket() {
-		this.BCHCode = this.baseID = this.dateToCustomer = this.customer = this.species = this.location = null;
+		this.Band_Number = this.Species = this.Deploy_Date = this.Deploy_Time = this.Deploy_Location = this.Recover_Date = this.Recover_Time = this.Recover_Location = this.Comment = null;
 	}
 	
 	// Check if any fields are NULL and then checks if empty
 	public boolean check(){
 		boolean valid = true;
 		
-		if(this.BCHCode == null) valid = false;
-		else if(this.BCHCode != null && this.BCHCode.isEmpty()) valid = false;
+		if(this.Band_Number == null) valid = false;
+		else if(this.Band_Number != null && this.Band_Number.isEmpty()) valid = false;
 		
-		if(this.baseID == null) valid = false;
-		else if(this.baseID != null && this.baseID.isEmpty()) valid = false;
+		if(this.Species == null) valid = false;
+		else if(this.Species != null && this.Species.isEmpty()) valid = false;
 		
-		if(this.dateProgrammed == null) valid = false;
-		else if(this.dateProgrammed != null && this.dateProgrammed.isEmpty()) valid = false;
+		if(this.Deploy_Date == null) valid = false;
+		else if(this.Deploy_Date != null && this.Deploy_Date.isEmpty()) valid = false;
 		
-		if(this.dateTested == null) valid = false;
-		else if(this.dateTested != null && this.dateTested.isEmpty()) valid = false;
+		if(this.Deploy_Time == null) valid = false;
+		else if(this.Deploy_Time != null && this.Deploy_Time.isEmpty()) valid = false;
 		
-		if(this.dateToCustomer == null) valid = false;
-		else if(this.dateToCustomer != null && this.dateToCustomer.isEmpty()) valid = false;
+		if(this.Deploy_Location == null) valid = false;
+		else if(this.Deploy_Location != null && this.Deploy_Location.isEmpty()) valid = false;
 		
-		if(this.customer == null) valid = false;
-		else if(this.customer != null && this.customer.isEmpty()) valid = false;
+		if(this.Recover_Date == null) valid = false;
+		else if(this.Recover_Date != null && this.Recover_Date.isEmpty()) valid = false;
 		
-		if(this.species == null) valid = false;
-		else if(this.species != null && this.species.isEmpty()) valid = false;
+		if(this.Recover_Time == null) valid = false;
+		else if(this.Recover_Time != null && this.Recover_Time.isEmpty()) valid = false;
 		
-		if(this.location == null) valid = false;
-		else if(this.location != null && this.location.isEmpty()) valid = false;
+		if(this.Recover_Location == null) valid = false;
+		else if(this.Recover_Location != null && this.Recover_Location.isEmpty()) valid = false;
+		
 
 		return valid;
 	}
 	
 	// Setters and getters
-	public void setAll(String BCHCode, String baseID, String dateProgrammed,
-			String dateTested, String dateToCustomer, String customer,
-			String species, String location){
-		this.BCHCode = BCHCode;
-		this.baseID = baseID;
-		this.dateProgrammed = dateProgrammed;
-		this.dateTested = dateTested;
-		this.dateToCustomer = dateToCustomer;
-		this.customer = customer;
-		this.species = species;
-		this.location = location;
+	public void setAll(String Band_Number, String Species, String Deploy_Date,
+			String Deploy_Time, String Deploy_Location, String Recover_Date,
+			String Recover_Time, String Recover_Location, String Comment){
+		this.Band_Number = Band_Number;
+		this.Species = Species;
+		this.Deploy_Date = Deploy_Date;
+		this.Deploy_Time = Deploy_Time;
+		this.Deploy_Location = Deploy_Location;
+		this.Recover_Date = Recover_Date;
+		this.Recover_Time = Recover_Time;
+		this.Recover_Location = Recover_Location;
+		this.Comment = Comment;
 	}
-	public void setBCHCode(String BCHCode){
-		this.BCHCode = BCHCode;
+	public void setBand_Number(String Band_Number){
+		this.Band_Number = Band_Number;
 	}
-	public String getBCHCode(){
-		return this.BCHCode;
-	}
-
-	public String getBaseID() {
-		return baseID;
-	}
-
-	public void setBaseID(String baseID) {
-		this.baseID = baseID;
-	}
-
-	public String getDateProgrammed() {
-		return dateProgrammed;
-	}
-
-	public void setDateProgrammed(String dateProgrammed) {
-		this.dateProgrammed = dateProgrammed;
-	}
-
-	public String getDateTested() {
-		return dateTested;
-	}
-
-	public void setDateTested(String dateTested) {
-		this.dateTested = dateTested;
-	}
-
-	public String getDateToCustomer() {
-		return dateToCustomer;
-	}
-
-	public void setDateToCustomer(String dateToCustomer) {
-		this.dateToCustomer = dateToCustomer;
-	}
-
-	public String getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(String customer) {
-		this.customer = customer;
+	public String getBand_Number(){
+		return this.Band_Number;
 	}
 
 	public String getSpecies() {
-		return species;
+		return Species;
 	}
 
-	public void setSpecies(String species) {
-		this.species = species;
+	public void setSpecies(String Species) {
+		this.Species = Species;
+	}
+
+	public String getDeploy_Date() {
+		return Deploy_Date;
+	}
+
+	public void setDeploy_Date(String Deploy_Date) {
+		this.Deploy_Date = Deploy_Date;
+	}
+
+	public String getDeploy_Time() {
+		return Deploy_Time;
+	}
+
+	public void setDeploy_Time(String Deploy_Time) {
+		this.Deploy_Time = Deploy_Time;
+	}
+
+	public String getDeploy_Location() {
+		return Deploy_Location;
+	}
+
+	public void setDeploy_Location(String Deploy_Location) {
+		this.Deploy_Location = Deploy_Location;
+	}
+
+	public String getRecover_Date() {
+		return Recover_Date;
+	}
+
+	public void setRecover_Date(String Recover_Date) {
+		this.Recover_Date = Recover_Date;
+	}
+
+	public String getRecover_Time() {
+		return Recover_Time;
+	}
+
+	public void setRecover_Time(String Recover_Time) {
+		this.Recover_Time = Recover_Time;
 	}
 
 	public String getLocation() {
-		return location;
+		return Recover_Location;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setLocation(String Recover_Location) {
+		this.Recover_Location = Recover_Location;
+	}
+	
+	public String getComment() {
+		return Comment;
+	}
+
+	public void setComment(String Comment){
+		this.Comment = Comment;
 	}
 
 	/* Creates single string to be used with network communication
@@ -147,8 +160,8 @@ public class GUIPacket{
 	public char[] getStreamable() {
 		char[] ret;
 		if(check()){
-			String all = this.BCHCode+":"+this.baseID+":"+this.dateProgrammed+":"+this.dateTested+":"+this.dateToCustomer
-					+":"+this.customer+":"+this.species+":"+this.location;
+			String all = this.Band_Number+":"+this.Recover_Time+":"+this.Deploy_Date+":"+this.Deploy_Time+":"+this.Deploy_Location
+					+":"+this.Recover_Date+":"+this.Recover_Time+":"+this.Recover_Location;
 			ret = all.toCharArray();
 		}
 		else{
