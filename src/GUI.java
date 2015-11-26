@@ -1,5 +1,6 @@
 import java.awt.*;        // Using AWT container and component classes
 import java.awt.event.*;  // Using AWT event classes and listener interfaces
+import java.util.Calendar;
 
 import javax.swing.JPanel;
 
@@ -11,6 +12,9 @@ import javax.swing.JPanel;
  */
 // An AWT program inherits from the top-level container java.awt.Frame
 public class GUI extends Frame implements ActionListener {
+	
+	private String comPort = "COM6";
+	private String IDPort = "COM7";
 	// Declare Label Components
 	private Label GUI_Label;
 	private Label Band_Number_label;
@@ -22,6 +26,9 @@ public class GUI extends Frame implements ActionListener {
 	private Label Recover_Time_Label;
 	private Label Recover_Location_Label;
 	private Label Comment_Label;
+	private Label Depoly_Location_Name_Label;
+	private Label Recover_Location_Name_Label;
+	
 	
 	//Declare Textfield Components
 	private TextField Band_Number;
@@ -33,6 +40,8 @@ public class GUI extends Frame implements ActionListener {
 	private TextField Recover_Time;
 	private TextField Recover_Location;
 	private TextField Comment;
+	private TextField Deploy_Location_Name;
+	private TextField Recover_Location_Name;
 	
 	//Declare String Resources
 	private String Band_Number_Text = "Band Number";
@@ -44,6 +53,8 @@ public class GUI extends Frame implements ActionListener {
 	private String Recover_Time_Text = "Recover Time";
 	private String Recover_Location_Text = "Recover Location";
 	private String Comment_Text = "Comments";
+	private String Recover_Location_Name_Text = "Recover Location Name";
+	private String Deploy_Location_Name_Text = "Deploy Location Name";
 	
 	private Label Error;
 	private Button eButton;
@@ -53,7 +64,9 @@ public class GUI extends Frame implements ActionListener {
 	private JPanel error;
 	private JPanel cards;
 	
-	private Button button;   // Declare component Button
+	private Button submit;   // Declare component Button
+	private Button deploy;
+	private Button recover;
  
    /** Constructor to setup GUI components and event handling */
 	public GUI () {
@@ -65,7 +78,7 @@ public class GUI extends Frame implements ActionListener {
 		GUI.setBackground(Color.decode("#D6D6C2"));
 		
 		Info = new JPanel();
-		Info.setLayout(new GridLayout(9, 2));
+		Info.setLayout(new GridLayout(11, 2));
 		
 		//Handles exit button on the window
 	    addWindowListener(new WindowAdapter(){
@@ -111,6 +124,13 @@ public class GUI extends Frame implements ActionListener {
 	    Info.add(Deploy_Time);                     // "super" Frame adds field
 	      
 	    //Date given to customer
+	    Depoly_Location_Name_Label = new Label(Deploy_Location_Name_Text);  // construct Label
+	    Info.add(Depoly_Location_Name_Label);                    // "super" Frame adds Label
+	 
+	    Deploy_Location_Name = new TextField("", 10); // construct TextField
+	    Deploy_Location_Name.setEditable(true);       // set to fillable field
+	    Info.add(Deploy_Location_Name);  
+	    
 	    Deploy_Location_Label = new Label(Deploy_Location_Text);  // construct Label
 	    Info.add(Deploy_Location_Label);                    // "super" Frame adds Label
 	 
@@ -135,6 +155,13 @@ public class GUI extends Frame implements ActionListener {
 	    Info.add(Recover_Time);                     // "super" Frame adds field
 	      
 	    //Recover_Location
+	    Recover_Location_Name_Label = new Label(Recover_Location_Name_Text);  // construct Label
+	    Info.add(Recover_Location_Name_Label);                    // "super" Frame adds Label
+	 
+	    Recover_Location_Name = new TextField("", 10); // construct TextField
+	    Recover_Location_Name.setEditable(true);       // set to fillable field
+	    Info.add(Recover_Location_Name);  
+	    
 	    Recover_Location_Label = new Label(Recover_Location_Text);  // construct Label
 	    Info.add(Recover_Location_Label);                    // "super" Frame adds Label
 	 
@@ -151,13 +178,18 @@ public class GUI extends Frame implements ActionListener {
 	    
 	      
 	    //Submit Button
-	    button = new Button("Submit");   // construct Button
+	    submit = new Button("Submit");   // construct Button
+	    deploy = new Button("Deploy");
+	    recover = new Button("Recover");
 	    
 	    GUI.add(Info);
-	    GUI.add(button);                    // "super" Frame adds Button
+	    GUI.add(deploy);
+	    GUI.add(recover);
+	    GUI.add(submit);                    // "super" Frame adds Button
 
-	 
-	    button.addActionListener(this);
+	    deploy.addActionListener(this);
+	    recover.addActionListener(this);
+	    submit.addActionListener(this);
 	    // Clicking Button source fires ActionEvent
 	    // btnCount registers this instance as ActionEvent listener
 	    
@@ -183,17 +215,17 @@ public class GUI extends Frame implements ActionListener {
 	   }
 	 
 	   /** The entry main() method */
-	   public static void main(String[] args) {
+	   /*public static void main(String[] args) {
 	      // Invoke the constructor to setup the GUI, by allocating an instance
 	      GUI app = new GUI();
-	   }
+	   }*/
 	 
 	   /** ActionEvent handler - Called upon button-click. */
 	   @Override
 	   public void actionPerformed(ActionEvent evt) {
 		   
 		    Button buttonPressed = (Button)evt.getSource();
-		    if (buttonPressed == button){
+		    if (buttonPressed == submit){
 
 				GUIPacket packet;
 				ClientCommunication socket = new ClientCommunication();
@@ -222,6 +254,50 @@ public class GUI extends Frame implements ActionListener {
 			    CardLayout cl = (CardLayout)(cards.getLayout());
 			    cl.show(cards, "GUI");
 		    }
-			
+		    if (buttonPressed == deploy){
+		        System.out.println("DEPLOY!"); 
+		        // connects to the port which name (e.g. COM1) is in the first argument  
+		        try {
+					Calendar today = Calendar.getInstance();
+					String date = today.getTime().toString().substring(4, 10) + today.getTime().toString().substring(23, 28);
+					String time = today.getTime().toString().substring(11, 20);
+		        	String[] info = new Port().connect(comPort);//
+		        	String ID = new PortID().connect(IDPort);
+					String location = info[1] + info[2] + ", " + info[3] + info[4];//
+					Deploy_Date.setText(date);
+					Deploy_Time.setText(time);
+					Deploy_Location.setText(location);//
+					Band_Number.setText(ID);
+					
+					//add logic to fill in fields
+				} catch (Exception e) {
+					e.printStackTrace();
+				}  
+ 
+		  }  
+		  if (buttonPressed == recover){
+			  System.out.println("Recover!"); 
+	          // connects to the port which name (e.g. COM1) is in the first argument  
+	          try {
+				Calendar today = Calendar.getInstance();
+				String date = today.getTime().toString().substring(4, 10) + today.getTime().toString().substring(23, 28);
+				String time = today.getTime().toString().substring(11, 20);
+	        	String[] info = new Port().connect(comPort);//
+
+				String location = info[1] + info[2] + ", " + info[3] + info[4];//
+				Recover_Date.setText(date);
+				Recover_Time.setText(time);
+				Recover_Location.setText(location);//
+				String ID = new PortID().connect(IDPort);
+				Band_Number.setText(ID);
+				
+				//add logic to fill in fields
+			} catch (Exception e) {
+				e.printStackTrace();
+			}  
+
+	    }  
 	   }
+			
+	   
 }
